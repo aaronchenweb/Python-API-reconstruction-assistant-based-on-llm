@@ -1,0 +1,63 @@
+sequenceDiagram
+    actor User
+    participant CLI as CLI Interface
+    participant Analyzer as Code Analyzer
+    participant Detector as Pattern Detector
+    participant Generator as Suggestion Generator
+    participant LLM as LLM Integration
+    participant Manager as Code Change Manager
+    
+    User->>CLI: Execute command
+    
+    alt Phase 1: analyze-file
+        CLI->>Analyzer: analyze_python_file()
+        Analyzer-->>CLI: AST Analysis
+        CLI->>LLM: get_completion()
+        LLM-->>CLI: Analysis results
+        CLI-->>User: Display report
+    
+    else Phase 2: suggest
+        CLI->>Analyzer: calculate_metrics()
+        Analyzer-->>CLI: Code metrics
+        CLI->>Detector: detect_patterns()
+        Detector-->>CLI: Design patterns
+        CLI->>Generator: generate_suggestions_for_file()
+        Generator-->>CLI: Basic suggestions
+        
+        opt LLM enabled
+            CLI->>LLM: get_completion(code + patterns)
+            LLM-->>CLI: Advanced suggestions
+        end
+        
+        CLI-->>User: Display suggestions
+    
+    else Phase 2: apply
+        CLI->>Generator: get_suggestion()
+        Generator-->>CLI: Suggestion details
+        CLI->>LLM: generate_refactored_code()
+        LLM-->>CLI: Refactored code
+        CLI-->>User: Show diff preview
+        User->>CLI: Confirm application
+        CLI->>Manager: Create new file with changes
+        Manager-->>CLI: Success/failure
+        CLI->>Generator: mark_suggestion_applied()
+        CLI-->>User: Success message
+    
+    else Phase 3: analyze-performance
+        CLI->>Analyzer: analyze_file()
+        Analyzer->>Analyzer: _static_analysis()
+        Analyzer->>Analyzer: _profile_execution()
+        Analyzer->>Analyzer: _analyze_algorithm_complexity()
+        Analyzer-->>CLI: Performance issues & metrics
+        
+        opt Optimize enabled
+            CLI->>LLM: optimize_code()
+            LLM-->>CLI: Optimized code
+            CLI-->>User: Show optimization preview
+            User->>CLI: Confirm save
+            CLI->>Manager: Save optimized code
+        end
+        
+        CLI-->>User: Display analysis
+    
+    end

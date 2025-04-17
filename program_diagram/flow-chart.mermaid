@@ -1,0 +1,59 @@
+flowchart TD
+    A[User Input] --> B[main.py]
+    B --> C{Command Type?}
+    
+    %% Phase 1 Commands
+    C -->|analyze-file| D[analyze_file]
+    D --> D1[Read file]
+    D1 --> D2[Parse AST]
+    D2 --> D3[Calculate metrics]
+    D3 --> D4[Get LLM analysis]
+    D4 --> D5[Output report]
+    
+    %% Phase 2 Commands
+    C -->|analyze| E[analyze_code]
+    E --> E1[Find Python files]
+    E1 --> E2[Calculate metrics]
+    E2 --> E3[Detect patterns]
+    E3 --> E4[Generate suggestions]
+    E4 --> E5[Display results]
+    
+    C -->|patterns| F[list_design_patterns]
+    F --> F1[Get patterns from registry]
+    F1 --> F2[Display pattern table]
+    
+    C -->|suggest| G[suggest_refactorings]
+    G --> G1[Generate basic suggestions]
+    G1 --> G2{Use LLM?}
+    G2 -->|No| G4[Display suggestions]
+    G2 -->|Yes| G3[Get LLM suggestions]
+    G3 --> G4
+    
+    C -->|apply| H[apply_suggestion]
+    H --> H1[Get suggestion]
+    H1 --> H2[Generate refactored code]
+    H2 --> H3[Show preview]
+    H3 --> H4{Apply?}
+    H4 -->|Yes| H5[Create new file]
+    H4 -->|No| H6[Cancel]
+    H5 --> H7[Mark suggestion applied]
+    
+    %% Phase 3 Commands
+    C -->|analyze-performance| I[analyze_performance]
+    I --> I1[Static analysis]
+    I1 --> I2[Profile execution]
+    I2 --> I3[Analyze algorithm complexity]
+    I3 --> I4[Show issues & metrics]
+    I4 --> I5{Optimize?}
+    I5 -->|Yes| I6[Generate optimized code]
+    I5 -->|No| I7[End]
+    
+    C -->|generate-docs| J[generate_docs]
+    J --> J1[Process files]
+    J1 --> J2[Extract structure & docstrings]
+    J2 --> J3[Generate markdown docs]
+    J3 --> J4[Create index]
+    J4 --> J5{Check consistency?}
+    J5 -->|Yes| J6[Verify docs against code]
+    J5 -->|No| J7[End]
+
